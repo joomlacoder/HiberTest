@@ -13,7 +13,10 @@ public class ProductsEntity {
     private String author;
 
     @Id
-    @Column(name = "id", nullable = false)
+    //HIBERNATE_SEQUENCE
+    @SequenceGenerator(name = "hibernateSeq", sequenceName = "HIBERNATE_SEQUENCE")
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "hibernateSeq")
+    @Column(name = "id", nullable = false, updatable = false)
     public int getId() {
         return id;
     }

@@ -13,42 +13,23 @@ import java.util.Map;
  * Created by Andrej on 26.11.2016.
  */
 public class Main {
-    private static final SessionFactory ourSessionFactory;
-    private static final ServiceRegistry serviceRegistry;
+    public static void main(String[] args) {
+        System.out.println("Hibernate tutorial");
 
-    static {
-        try {
-            Configuration configuration = new Configuration();
-            configuration.configure();
+        Session session = HibernateSessionFactory.getSessionFactory().openSession();
 
-            serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-            ourSessionFactory = configuration.buildSessionFactory(serviceRegistry);
-        } catch (Throwable ex) {
-            throw new ExceptionInInitializerError(ex);
-        }
-    }
+        session.beginTransaction();
 
-    public static Session getSession() throws HibernateException {
-        return ourSessionFactory.openSession();
-    }
+        DAO.ProductsEntity book = new DAO.ProductsEntity();
 
-    public static void main(final String[] args) throws Exception {
-        final Session session = getSession();
-        try {
-            System.out.println("querying all the managed entities...");
-            session.beginTransaction();
-            Hiber.ProductsEntity book = new Hiber.ProductsEntity();
-            //book.setId(20);
-            book.setName("Кникакакаято");
-            //book.setYear(2016);
-            book.setAuthor("wert");
-            //book.setPrice(1234);
-            //book.setPublishingHouse("asdfgh");
-            //book.setQuantityInStock(9999);
-            session.save(book);
-            session.getTransaction().commit();
-        } finally {
-            session.close();
-        }
+        book.setAuthor("Bik");
+        book.setName("Nick");
+
+
+        session.persist(book);
+        session.getTransaction().commit();
+
+        session.close();
+
     }
 }
